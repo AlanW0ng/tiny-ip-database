@@ -1,7 +1,6 @@
 package ipdb
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -87,7 +86,6 @@ func (ipSegs *IpSegments) Update(ip uint32) error {
 			left = mid + 1
 		}
 
-		fmt.Println(left, mid, right, left > right)
 		// 判断如果left大于right，那么这个元素是不存在的
 		if left > right {
 			lIpSeg, rIpSeg := &(*ipSegs)[Max(right, 0)], &(*ipSegs)[Min(left, len(*ipSegs)-1)]
