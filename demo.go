@@ -2,29 +2,27 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/AlanW0ng/tiny-ip-database/ipdb"
 	"io/ioutil"
-	"github.com/AlanW0ng/tiny-ip-database"
+	"log"
 )
 
-func update_test(ipdb *ipdb.IpDB) {
-	ip := "1.26.15.40"
-	fmt.Println(ipdb.Find(ip))
-	fmt.Println(ipdb.Update(ip))
-	fmt.Println(ipdb.Find(ip))
-	fmt.Println(ipdb.Dump("b.csv"))
+func update_test(ipdb *ipdb.IpDB, ip string) {
+	log.Println(ipdb.Find(ip))
+	log.Println(ipdb.Update(ip))
+	log.Println(ipdb.Find(ip))
+	//log.Println(ipdb.Dump("tmp.csv"))
 }
 
-func delete_test(ipdb *ipdb.IpDB) {
-	ip := "223.247.95.200"
-	fmt.Println(ipdb.Find(ip))
-	fmt.Println(ipdb.Delete(ip))
-	fmt.Println(ipdb.Find(ip))
-	fmt.Println(ipdb.Dump("b.csv"))
+func delete_test(ipdb *ipdb.IpDB, ip string) {
+	log.Println(ipdb.Find(ip))
+	log.Println(ipdb.Delete(ip))
+	log.Println(ipdb.Find(ip))
+	//log.Println(ipdb.Dump("tmp.csv"))
 }
 
-func match_test(ipdb *ipdb.IpDB) {
-	b, _ := ioutil.ReadFile("/tmp/ips_to_match.json")
+func match_test(ipdb *ipdb.IpDB, input, output string) {
+	b, _ := ioutil.ReadFile(input)
 	var ips []string
 	err := json.Unmarshal(b, &ips)
 	if err != nil {
@@ -37,11 +35,18 @@ func match_test(ipdb *ipdb.IpDB) {
 		}
 	}
 	b, _ = json.Marshal(bad_ips)
-	ioutil.WriteFile("/tmp/match_ips.json", b, 0644)
+	ioutil.WriteFile(output, b, 0644)
 }
 
 func main() {
-	ipdb := new(ipdb.IpDB)
-	ipdb.Load("a.csv")
-	fmt.Println(ipdb.Count())
+	db1, db2 := new(ipdb.IpDB), new(ipdb.IpDB)
+	ip := "1.1.1.1"
+	dbFile := "tmp.csv"
+	log.Println("find: ", db1.Find(ip))
+	log.Println("update err: ", db1.Update(ip))
+	log.Println("find after updating: ", db1.Find(ip))
+	log.Println("dump err: ", db1.Dump(dbFile))
+	log.Println("load err: ", db2.Load(dbFile))
+	log.Println("find after loading: ", db2.Find(ip))
+	log.Println("db2 count: ", db2.Count())
 }

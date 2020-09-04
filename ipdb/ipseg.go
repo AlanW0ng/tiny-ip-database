@@ -19,7 +19,11 @@ func (seg IpSegments) Swap(i, j int) {
 
 func (ipSegs *IpSegments) Find(ip uint32) (idx uint32, exists bool) {
 	// 使用二分法查找
-	left, right, mid := 0, len(*ipSegs)-1, 0
+	length := len(*ipSegs)
+	if length < 1 {
+		return idx, false
+	}
+	left, right, mid := 0, length-1, 0
 	for {
 		// mid向下取整
 		mid = int(math.Floor(float64((left + right) / 2)))
@@ -57,6 +61,14 @@ func (ipSegs *IpSegments) delete(idx uint32) error {
 
 func (ipSegs *IpSegments) Update(ip uint32) error {
 	// 使用二分法定位包含该IP的IP段或者最接近的IP段
+	length := len(*ipSegs)
+	if length < 1 {
+		newIpSeg := IpSegment{
+			Start: ip,
+			End:   ip,
+		}
+		return ipSegs.update(0, newIpSeg)
+	}
 	var left, right, mid int
 	left, right, mid = 0, len(*ipSegs)-1, 0
 	for {
