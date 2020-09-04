@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"tiny-ip-database/ipdb"
+	"github.com/AlanW0ng/tiny-ip-database"
 )
 
 func update_test(ipdb *ipdb.IpDB) {
